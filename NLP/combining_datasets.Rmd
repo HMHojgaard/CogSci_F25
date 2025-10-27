@@ -1,0 +1,49 @@
+---
+title: "Combining datasets for NLP"
+author: "Hannah Mai"
+date: "2025-10-26"
+output: html_document
+---
+
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(root.dir = "~/Documents/GitHub/CogSci_F25", echo = TRUE)
+
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+## Load in data
+```{r}
+df_true <- read.csv("~/Documents/GitHub/CogSci_F25/NLP/data/True.csv")
+df_fake <- read.csv("~/Documents/GitHub/CogSci_F25/NLP/data/Fake.csv")
+```
+
+## Add column with binary True/false indicator
+```{r}
+# 1 = True
+df_true <- df_true %>% mutate(label = 1)
+
+#0 = False
+df_fake <- df_fake %>% mutate(label = 0) 
+```
+
+## Combine dfs
+```{r}
+# Combine them into one dataframe
+df <- bind_rows(df_true, df_fake)
+```
+
+## Shuffle rows
+```{r}
+set.seed(983)  #Making it reproducible 
+df <- df[sample(nrow(df)), ]
+```
+
+## Saving df as CSV
+```{r}
+write.csv(df, "combined_data.csv", row.names = FALSE)
+```
+
+
+
